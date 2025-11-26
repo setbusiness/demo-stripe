@@ -37,3 +37,6 @@ ui-debug.log
 # Local configuration files (contiennent des secrets)
 functions/config.local.js
 
+# Documentation files
+*.md
+
