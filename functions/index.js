@@ -1,9 +1,33 @@
 const functions = require('firebase-functions')
 const cors = require('cors')({ origin: true })
 
-// ⚠️ POUR TEST UNIQUEMENT : Clé secrète Stripe en dur
-// En production, utilisez : functions.config().stripe.secret
-const stripe = require('stripe')(STRIPE_SECRET_KEY)
+// Configuration de la clé secrète Stripe
+// Priorité : 1) functions.config() 2) Variable d'environnement 3) Fichier local
+let stripeSecretKey
+
+try {
+  // Essayer d'utiliser functions.config() (recommandé)
+  stripeSecretKey = functions.config().stripe?.secret
+} catch (e) {
+  // Si functions.config() n'est pas disponible, utiliser une variable d'environnement
+  stripeSecretKey = process.env.STRIPE_SECRET_KEY
+}
+
+// Si aucune méthode n'a fonctionné, charger depuis un fichier local (pour développement)
+if (!stripeSecretKey) {
+  try {
+    const localConfig = require('./config.local.js')
+    stripeSecretKey = localConfig.stripeSecretKey
+  } catch (e) {
+    // Fichier local non trouvé, ce n'est pas grave
+  }
+}
+
+if (!stripeSecretKey) {
+  throw new Error('Clé secrète Stripe non configurée. Voir README.md pour la configuration.')
+}
+
+const stripe = require('stripe')(stripeSecretKey)
 
 // Produits disponibles
 const products = {

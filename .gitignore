@@ -34,3 +34,6 @@ ui-debug.log
 .env.local
 .env.production
 
+# Local configuration files (contiennent des secrets)
+functions/config.local.js
+

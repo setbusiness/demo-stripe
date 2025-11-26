@@ -48,10 +48,33 @@ Lors de l'initialisation :
    - **Clé publique** : `pk_test_...` (pour React)
    - **Clé secrète** : `sk_test_...` (pour Firebase Functions)
 
-#### Configurer la clé secrète dans Firebase
+#### Configurer la clé secrète Stripe
+
+**Option 1 : Fichier local (pour développement/test)**
+
+1. Copiez le fichier d'exemple :
+```bash
+cd functions
+cp config.local.example.js config.local.js
+```
+
+2. Éditez `functions/config.local.js` et ajoutez votre clé secrète :
+```javascript
+module.exports = {
+  stripeSecretKey: 'sk_test_VOTRE_CLE_SECRETE'
+}
+```
+
+**Option 2 : Firebase Config (pour déploiement)**
 
 ```bash
 firebase functions:config:set stripe.secret="sk_test_VOTRE_CLE_SECRETE"
+```
+
+**Option 3 : Variable d'environnement**
+
+```bash
+export STRIPE_SECRET_KEY="sk_test_VOTRE_CLE_SECRETE"
 ```
 
 ### 5. Configurer React avec votre clé publique

@@ -6,20 +6,43 @@ L'erreur `403, Permission denied to get service [runtimeconfig.googleapis.com]` 
 
 ## ✅ Solution appliquée (Simple - pour test)
 
-J'ai modifié `functions/index.js` pour utiliser directement la clé secrète dans le code. **C'est acceptable pour un projet de test/démo en mode test uniquement.**
+Le code utilise maintenant un fichier local `config.local.js` pour stocker la clé secrète. **Ce fichier n'est pas versionné et reste local.**
 
 ### Ce qui a été fait
 
-La clé secrète est maintenant directement dans le fichier `functions/index.js` avec un commentaire clair indiquant que c'est pour le test uniquement.
+1. Le code essaie d'abord `functions.config()` (méthode recommandée)
+2. Sinon, il utilise une variable d'environnement `STRIPE_SECRET_KEY`
+3. En dernier recours, il charge depuis `functions/config.local.js` (pour développement local)
 
-## 🚀 Prochaines étapes
+## 🚀 Configuration rapide (pour test local)
 
-Maintenant vous pouvez déployer directement :
+### Option 1 : Fichier local (recommandé pour développement)
 
+1. Copiez le fichier d'exemple :
 ```bash
 cd functions
-npm install
-cd ..
+cp config.local.example.js config.local.js
+```
+
+2. Éditez `config.local.js` et ajoutez votre clé secrète :
+```javascript
+module.exports = {
+  stripeSecretKey: 'sk_test_VOTRE_CLE_SECRETE'
+}
+```
+
+3. Le fichier `config.local.js` est dans `.gitignore` et ne sera pas versionné.
+
+### Option 2 : Variable d'environnement
+
+```bash
+export STRIPE_SECRET_KEY="sk_test_VOTRE_CLE_SECRETE"
+```
+
+### Option 3 : Firebase Config (pour déploiement)
+
+```bash
+firebase functions:config:set stripe.secret="sk_test_VOTRE_CLE_SECRETE"
 firebase deploy --only functions
 ```
 
@@ -44,8 +67,10 @@ Si vous voulez utiliser la méthode sécurisée avec `functions.config()` (recom
 ### 3. Réessayer la commande
 
 ```bash
-firebase functions:config:set stripe.secret="sk_test_51SXdZYGqKSpED76emOyHqYQiGiTxCUIDjCkf4hzhzUOBPQvNeUFM8vaIHHrqYTmrU9zFfqQYMnOEhPQtp1vdmW0E00WStPxOek"
+firebase functions:config:set stripe.secret="sk_test_VOTRE_CLE_SECRETE"
 ```
+
+Remplacez `sk_test_VOTRE_CLE_SECRETE` par votre vraie clé secrète.
 
 ### 4. Modifier functions/index.js pour utiliser config
 
