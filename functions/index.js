@@ -3,7 +3,6 @@ const cors = require('cors')({ origin: true })
 
 // ⚠️ POUR TEST UNIQUEMENT : Clé secrète Stripe en dur
 // En production, utilisez : functions.config().stripe.secret
-const STRIPE_SECRET_KEY = 'sk_test_51SXdZYGqKSpED76emOyHqYQiGiTxCUIDjCkf4hzhzUOBPQvNeUFM8vaIHHrqYTmrU9zFfqQYMnOEhPQtp1vdmW0E00WStPxOek'
 const stripe = require('stripe')(STRIPE_SECRET_KEY)
 
 // Produits disponibles
